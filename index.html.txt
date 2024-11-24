@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Risk Assessment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2C3E50;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        fieldset {
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        legend {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2980B9;
+        }
+
+        label {
+            font-size: 1em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #2980B9;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+
+        button:hover {
+            background-color: #3498DB;
+        }
+
+        #result {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e7f2f7;
+            border-radius: 5px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Diabetes Risk Assessment</h1>
+
+    <form id="diabetesForm">
+        <fieldset>
+            <legend>Basic Information</legend>
+            <label for="age">Age (in years):</label>
+            <input type="number" id="age" name="age" required><br>
+
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select><br>
+
+            <label for="ethnicity">Ethnicity (optional):</label>
+            <input type="text" id="ethnicity" name="ethnicity"><br>
+        </fieldset>
+
+        <fieldset>
+            <legend>Family History</legend>
+            <label for="familyHistory">Do you have a family history of diabetes?</label>
+            <select id="familyHistory" name="familyHistory" required>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select><br>
+        </fieldset>
+
+        <fieldset>
+            <legend>Physical Activity</legend>
+            <label for="exercise">How often do you exercise in a week?</label><br>
+            <input type="radio" id="exercise1" name="exercise" value="none">
+            <label for="exercise1">None</label><br>
+            <input type="radio" id="exercise2" name="exercise" value="1-2 times">
+            <label for="exercise2">1-2 times</label><br>
+            <input type="radio" id="exercise3" name="exercise" value="3-4 times">
+            <label for="exercise3">3-4 times</label><br>
+            <input type="radio" id="exercise4" name="exercise" value="5+ times">
+            <label for="exercise4">5+ times</label><br>
+        </fieldset>
+
+        <fieldset>
+            <legend>Dietary Habits</legend>
+            <label for="diet">Do you follow a healthy diet (high in fiber, low in sugar)?</label>
+            <select id="diet" name="diet" required>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select><br>
+        </fieldset>
+
+        <fieldset>
+            <legend>Body Measurements</legend>
+            <label for="height">Height (in cm):</label>
+            <input type="number" id="height" name="height" required><br>
+
+            <label for="weight">Weight (in kg):</label>
+            <input type="number" id="weight" name="weight" required><br>
+        </fieldset>
+
+        <fieldset>
+            <legend>Existing Health Conditions</legend>
+            <label for="existingConditions">Do you have any of the following conditions?</label><br>
+            <input type="checkbox" id="highBloodPressure" name="existingConditions" value="High blood pressure">
+            <label for="highBloodPressure">High blood pressure</label><br>
+            <input type="checkbox" id="cholesterol" name="existingConditions" value="High cholesterol">
+            <label for="cholesterol">High cholesterol</label><br>
+            <input type="checkbox" id="heartDisease" name="existingConditions" value="Heart disease">
+            <label for="heartDisease">Heart disease</label><br>
+        </fieldset>
+
+        <fieldset>
+            <legend>Recent Symptoms</legend>
+            <label for="symptoms">Have you noticed any of the following symptoms recently?</label><br>
+            <input type="checkbox" id="fatigue" name="symptoms" value="Fatigue">
+            <label for="fatigue">Fatigue</label><br>
+            <input type="checkbox" id="increasedThirst" name="symptoms" value="Increased thirst">
+            <label for="increasedThirst">Increased thirst</label><br>
+            <input type="checkbox" id="frequentUrination" name="symptoms" value="Frequent urination">
+            <label for="frequentUrination">Frequent urination</label><br>
+        </fieldset>
+
+        <button type="button" onclick="calculateRisk()">Calculate Risk</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        function calculateRisk() {
+            let age = document.getElementById('age').value;
+            let gender = document.getElementById('gender').value;
+            let familyHistory = document.getElementById('familyHistory').value;
+            let exercise = document.querySelector('input[name="exercise"]:checked').value;
+            let diet = document.getElementById('diet').value;
+            let height = document.getElementById('height').value;
+            let weight = document.getElementById('weight').value;
+            let existingConditions = [];
+            document.querySelectorAll('input[name="existingConditions"]:checked').forEach(function(checkbox) {
+                existingConditions.push(checkbox.value);
+            });
+            let symptoms = [];
+            document.querySelectorAll('input[name="symptoms"]:checked').forEach(function(checkbox) {
+                symptoms.push(checkbox.value);
+            });
+
+            // Basic risk score calculation
+            let riskScore = 0;
+
+            // Age-related risk increase
+            if (age > 45) riskScore += 2;
+            if (age > 60) riskScore += 3;
+
+            // Gender-related risk
+            if (gender === "male") riskScore += 1;
+
+            // Family history of diabetes
+            if (familyHistory === "yes") riskScore += 3;
+
+            // Exercise level
+            if (exercise === "none") riskScore += 3;
+            if (exercise === "1-2 times") riskScore += 2;
+            if (exercise === "3-4 times") riskScore += 1;
+
+            // Diet habit
+            if (diet === "no") riskScore += 2;
+
+            // BMI Calculation: Weight (kg) / Height (m)^2
+            let heightInMeters = height / 100;
+            let bmi = weight / (heightInMeters * heightInMeters);
+            if (bmi > 30) riskScore += 3;
+            else if (bmi > 25) riskScore += 2;
+
+            // Existing health conditions
+            if (existingConditions.includes("High blood pressure")) riskScore += 2;
+            if (existingConditions.includes("High cholesterol")) riskScore += 2;
+            if (existingConditions.includes("Heart disease")) riskScore += 3;
+
+            // Symptoms
+            if (symptoms.length > 0) riskScore += 2;
+
+            // Result
+            let riskLevel = "Low";
+            if (riskScore >= 6 && riskScore <= 10) {
+                riskLevel = "Medium";
+            } else if (riskScore > 10) {
+                riskLevel = "High";
+            }
+
+            document.getElementById('result').innerHTML = "Your diabetes risk level is: " + riskLevel;
+        }
+    </script>
+
+</body>
+</html>
